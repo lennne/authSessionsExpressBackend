@@ -1,0 +1,10 @@
+name: NodeJS CI - Login
+on:
+  push:
+    branches: [ "loginFunctionality" ]
+jobs: 
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Output
+      run: echo "hello world"
