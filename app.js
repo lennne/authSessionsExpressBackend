@@ -91,7 +91,8 @@ app.post('/api/customer', async(req, res) => {
     //Saving the new customer to the MongoDB 'customers' collection
     await customer.save();
 
-    res.send("Customer saved successfully");
+    res.redirect('/');
+
 });
 
 app.get('/', async(req, res) => {
