@@ -2,6 +2,12 @@ const mongoose = require('mongoose');
 const Customers = require('./customer');
 const express = require('express');
 const bodyParser = require('body-parser');
+//we iinstall and import bcrypt for hashing and storing passwords securely
+const bcrypt = require('bcrypt');
+//to store passwords we need to create salts - extra random data to add to the passwords
+const saltRounds = 5;
+const password = "admin";
+
 const path = require('path');
 require("dotenv").config();
 //an instance of the express application
@@ -33,11 +39,16 @@ app.post('/api/login', async (req, res) => {
     let password = data['password'];
 
     //Querying the mongoDB 'customers' collection for matching user_name and password
-    const documents = await Customers.find({user_name: user_name, password: password});
+    const documents = await Customers.find({user_name: user_name});
 
     //if a matching user is found, set the session username and serve the home page
     if(documents.length > 0){
-        res.send("User logged In");
+        let result = await bcrypt.compare(password, documents[0]['password']);
+        if(true){
+            res.send("User logged in");
+        }else{
+            res.send("Incorrect Information! Try again")
+        }
     }else{
         res.send("User Information incorrect");
     }
@@ -45,17 +56,20 @@ app.post('/api/login', async (req, res) => {
 
 app.post('/api/customer', async(req, res) => {
     const data = req.body;
-    console.log(data);
+
     const documents = await Customers.find({user_name: data['user_name']})
     if(documents.lenth > 0){
         res.send("User already exists");
     }
 
+    //Create a hashed password
+    let hashedpwd = bcrypt.hashSync(data['password'], saltRounds);
+
     //Creating a new instance of the Customers model with data from the request
     const customer = new Customers({
         "user_name": data['user_name'],
         "age": data['age'],
-        "password": data['password'],
+        "password": hashedpwd,
         "email": data['email']
     });
 
