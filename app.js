@@ -29,7 +29,20 @@ app.use(bodyParser.urlencoded({ extended: true}))
 app.post('/api/login', async () => {
     const data = req.body;
     console.log(data);
-    
+    let user_name = data['user_name'];
+    let password = data['password'];
+
+    //Querying the mongoDB 'customers' collection for matching user_name and password
+    const documents = await Customers.find({user_name: user_name, password: password});
+
+    //if a matching user is found, set the session username and serve the home page
+    if(documents.length > 0){
+        res.send("User logged In");
+    }else{
+        res.send("User Information incorrect");
+    }
+
+
 });
 
 // Starting the server and listening on the specified port
