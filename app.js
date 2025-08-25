@@ -26,7 +26,7 @@ app.use('/static', express.static(path.join(".", 'frontend')));
 // Space " " → %20
 app.use(bodyParser.urlencoded({ extended: true}))
 
-app.post('/api/login', async () => {
+app.post('/api/login', async (req, res) => {
     const data = req.body;
     console.log(data);
     let user_name = data['user_name'];
@@ -41,9 +41,11 @@ app.post('/api/login', async () => {
     }else{
         res.send("User Information incorrect");
     }
-
-
 });
+
+app.post('/api/customer', async(req, res) => {
+
+})
 
 // Starting the server and listening on the specified port
 app.listen(port, () => {
