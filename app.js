@@ -44,7 +44,29 @@ app.post('/api/login', async (req, res) => {
 });
 
 app.post('/api/customer', async(req, res) => {
+    const data = req.body;
+    console.log(data);
+    const documents = await Customers.find({user_name: data['user_name']})
+    if(documents.lenth > 0){
+        res.send("User already exists");
+    }
 
+    //Creating a new instance of the Customers model with data from the request
+    const customer = new Customers({
+        "user_name": data['user_name'],
+        "age": data['age'],
+        "password": data['password'],
+        "email": data['email']
+    });
+
+    //Saving the new customer to the MongoDB 'customers' collection
+    await customer.save();
+
+    res.send("Customer saved successfully");
+});
+
+app.get('/', async(req, res) => {
+    res.sendFile(path.join(__dirname, 'frontend', 'home.html'));
 })
 
 // Starting the server and listening on the specified port
