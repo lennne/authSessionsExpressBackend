@@ -11,10 +11,23 @@ const port = 3000;
 
 //MongoDB  connection URI and databasename
 const uri = process.env.MONGO_DB;
-mongoose.connect(uri, {'dbName': 'customerDB'})
+mongoose.connect(uri, {'dbName': 'customerDB'});
+
+//Middleware to pares JSON data
+app.use(bodyParser.json())
+
+//Serving static files from the 'frontend' directory under the '/static' routes
+app.use('/static', express.static(path.join(".", 'frontend')));
+
+//Middleware to handle URL encoded form data
+// URL sEncoding replaces unsafe characters with:
+// % + [two-digit hexadecimal code of the character in ASCII/UTF-8]
+// Examples:
+// Space " " → %20
+app.use(bodyParser.urlencoded({ extended: true}))
+
 
 // Starting the server and listening on the specified port
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
-    
-})
+});
