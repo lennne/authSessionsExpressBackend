@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const Customers = require('./customer');
 const express = require('express');
 const bodyParser = require('body-parser');
+const session = require('express-session')
 //we iinstall and import bcrypt for hashing and storing passwords securely
 const bcrypt = require('bcrypt');
 //to store passwords we need to create salts - extra random data to add to the passwords
